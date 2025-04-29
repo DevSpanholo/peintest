@@ -1,4 +1,4 @@
-# Site Visitor Script
+# Projeto de Automação com Playwright e Tor
 
 Este script automatiza visitas a sites usando o Playwright com comportamento humano simulado e rotação de proxies.
 
@@ -10,9 +10,78 @@ Este script automatiza visitas a sites usando o Playwright com comportamento hum
 
 ## Instalação
 
+Requisitos:
+- Node.js v18 ou superior
+- Tor instalado no sistema (veja abaixo como configurar)
+- Git (opcional)
+
+Instalando as dependências com npm:
+
 ```bash
 npm install
 ```
+
+## Configuração de Múltiplas Instâncias do Tor
+
+- Linux: sudo apt update
+ -> sudo apt install tor -y
+
+- 2 -> Copie a configuração para uma nova instância:
+
+```sudo cp -r /etc/tor /etc/tor-instance2
+sudo nano /etc/tor-instance2/torrc
+```
+
+- Exemplo de conteúdo para o torrc da instância:
+```SocksPort 9052
+ControlPort 9053
+DataDirectory /var/lib/tor-instance2
+CookieAuthentication 1
+```
+
+- Crie o serviço systemd:
+
+```sudo nano /etc/systemd/system/tor@instance2.service
+```
+
+- [Unit]
+Description=Tor instance2
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/tor -f /etc/tor-instance2/torrc
+User=debian-tor
+Group=debian-tor
+
+[Install]
+WantedBy=multi-user.target
+
+- sudo systemctl daemon-reexec
+- sudo systemctl enable tor@instance2
+- sudo systemctl start tor@instance2
+
+# Windows
+- Baixe o Tor Expert Bundle em: https://www.torproject.org/download/tor/
+
+- Extraia em diretórios diferentes, por exemplo:
+
+- C:\Tor\tor1
+- C:\Tor\tor2
+
+- Em cada pasta, crie um arquivo torrc com conteúdo semelhante:
+
+- SocksPort 9052
+- ControlPort 9053
+- DataDirectory C:\Tor\tor2\data
+- CookieAuthentication 1
+
+- Crie um script .bat para iniciar:
+```cd C:\Tor\tor2
+start tor.exe -f torrc
+```
+
+
+
 
 ## Uso
 
@@ -25,7 +94,13 @@ node test.mjs
 Para executar a versão avançada:
 
 ```bash
-node enhanced-test.mjs
+node test.mjs
+```
+
+Para executar a versão de múltiplas instâncias:
+
+```bash
+node parallel.mjs
 ```
 
 ## Configuração
@@ -37,15 +112,16 @@ Edite o arquivo `config.mjs` para personalizar:
 - Configurações de proxy
 - Tempos de espera
 - User agents e referências
+- Ref de origem
 
 ## Recursos
 
-- ✅ Autenticação proxy corrigida
-- ✅ Retry automático em caso de falhas
-- ✅ Simulação realista de comportamento humano
-- ✅ Cabeçalhos e cookies anti-detecção
-- ✅ Rotação de IPs, user agents e referências
-- ✅ Configuração flexível
+- [x] Autenticação proxy corrigida via tor
+- [x] Retry automático em caso de falhas
+- [x] Simulação realista de comportamento humano
+- [x] Cabeçalhos e cookies anti-detecção
+- [x] Rotação de IPs, user agents e referências tor
+- [x] Configuração flexível
 
 ## Solução de Problemas
 
@@ -55,9 +131,12 @@ Edite o arquivo `config.mjs` para personalizar:
 - `ERR_HTTP_RESPONSE_CODE_FAILURE`: O site pode estar bloqueando o acesso
 - `ERR_ABORTED`: A conexão foi interrompida
 
-### Dicas
+### Futuro
 
-1. Aumente os tempos de espera para sites mais lentos
-2. Reduza o número de visitas simultâneas
-3. Use um conjunto maior de proxies rotativos
-4. Verifique se o proxy é compatível com o site alvo
+- Teste de api
+- Painel admin com relatórios
+
+
+### Objetivo do uso, ambiente controlado e de testes, não usar em produção.
+
+
