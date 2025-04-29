@@ -41,21 +41,24 @@ CookieAuthentication 1
 
 - Crie o serviço systemd:
 
-```sudo nano /etc/systemd/system/tor@instance2.service
+```
+sudo nano /etc/systemd/system/tor@instance2.service
 ```
 
-- [Unit]
+```[Unit]
 Description=Tor instance2
 After=network.target
-
+```
+```
 [Service]
 ExecStart=/usr/bin/tor -f /etc/tor-instance2/torrc
 User=debian-tor
 Group=debian-tor
-
+```
+```
 [Install]
 WantedBy=multi-user.target
-
+```
 - sudo systemctl daemon-reexec
 - sudo systemctl enable tor@instance2
 - sudo systemctl start tor@instance2
