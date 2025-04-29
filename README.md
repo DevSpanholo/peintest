@@ -23,10 +23,11 @@ npm install
 
 ## Configuração de Múltiplas Instâncias do Tor
 
-- Linux: sudo apt update
- -> sudo apt install tor -y
-
-- 2 -> Copie a configuração para uma nova instância:
+- Linux: ```sudo apt update
+```
+```sudo apt install tor -y
+```
+- 2 Copie a configuração para uma nova instância:
 
 ```sudo cp -r /etc/tor /etc/tor-instance2
 sudo nano /etc/tor-instance2/torrc
@@ -73,10 +74,11 @@ WantedBy=multi-user.target
 
 - Em cada pasta, crie um arquivo torrc com conteúdo semelhante:
 
-- SocksPort 9052
-- ControlPort 9053
-- DataDirectory C:\Tor\tor2\data
-- CookieAuthentication 1
+```SocksPort 9052
+ControlPort 9053
+DataDirectory C:\Tor\tor2\data
+CookieAuthentication 1
+```
 
 - Crie um script .bat para iniciar:
 ```cd C:\Tor\tor2
