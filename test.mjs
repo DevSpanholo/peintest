@@ -8,7 +8,7 @@ export { start };
 const TOTAL_VISITS = 5000;
 const MIN_VIEW_TIME = 10000; // 20 segundos mínimos por página
 const MAX_VIEW_TIME = 20000; // 90 segundos máximo por página
-const ALLOWED_DOMAINS = ['cifradedinheiro.com', 'brasilquiz.com']; // Domínios permitidos
+const ALLOWED_DOMAINS = ['cifradedinheiro.com', 'brasilquiz.com', 'monetizaweb.com']; // Domínios permitidos
 
 // Estrutura para armazenar dados da visita
 class VisitData {
@@ -48,6 +48,22 @@ const TRACK_EVENTS = [
   'clarity',
   'turnstile'  // Cloudflare Turnstile event
 ];
+function parseSource(referrer, utmSource) {
+  let hostname = '';
+
+  try {
+    hostname = new URL(referrer).hostname;
+  } catch (e) {
+    hostname = '';
+  }
+
+  if (hostname.includes('facebook')) return 'facebook';
+  if (hostname.includes('tiktok')) return 'tiktok';
+  if (hostname.includes('google')) return 'google';
+  if (hostname.includes('instagram')) return 'instagram';
+
+  return utmSource !== 'não identificado' ? utmSource : 'desconhecido';
+}
 
 // Função para extrair UTM params
 function getUtmParams(url) {
@@ -76,35 +92,13 @@ function isAllowedDomain(url) {
 }
 
 const SITE_URLS = [
-  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=291&utm_term=291&cf_ads=291',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-e-concorra-a-1-iphone-com-o-cifra-do-bem/?utm_source=291&utm_term=291&cf_ads=291',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-cifra-do-bem-2-mil-reais-em-compras/?utm_source=291&utm_term=291&cf_ads=291', 
-  'https://brasilquiz.com/sorteio/transforme-sua-rotina-em-uma-aventura-ganhe-r300-semanalmente-com-o-cifra-do-bem/?utm_source=291&utm_term=291&cf_ads=291',
-  'https://brasilquiz.com/sorteio/transforme-sua-rotina-em-uma-aventura-ganhe-r300-semanalmente-com-o-cifra-do-bem/?utm_source=303&utm_term=303&cf_ads=303',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-cifra-do-bem-2-mil-reais-em-compras/?utm_source=303&utm_term=303&cf_ads=303',
-  'https://cifradedinheiro.com/acao-solidaria/transforme-sua-casa-participe-da-campanha-transforme-a-sua-casa-escolha-um-eletrodomestico-com-o-cifra-do-bem/?utm_source=303&utm_term=303&cf_ads=303',
-  'https://cifradedinheiro.com/acao-solidaria/participe-da-campanha-e-ganhe-r-2-000-em-dividas-pagas-com-cifra-do-bem/?utm_source=303&utm_term=303&cf_ads=303',
-  'https://brasilquiz.com/sorteio/transforme-sua-rotina-em-uma-aventura-ganhe-r300-semanalmente-com-o-cifra-do-bem/?utm_source=216&utm_term=216&cf_ads=216',
-  'https://cifradedinheiro.com/acao-solidaria/transforme-sua-casa-participe-da-campanha-transforme-a-sua-casa-escolha-um-eletrodomestico-com-o-cifra-do-bem/?utm_source=216&utm_term=216&cf_ads=216',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-e-concorra-a-1-iphone-com-o-cifra-do-bem/?utm_source=216&utm_term=216&cf_ads=216',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-cifra-do-bem-2-mil-reais-em-compras/?utm_source=216&utm_term=216&cf_ads=216',
-  'https://cifradedinheiro.com/acao-solidaria/participe-da-campanha-e-ganhe-r-2-000-em-dividas-pagas-com-cifra-do-bem/?utm_source=216&utm_term=216&cf_ads=216',
-  'https://brasilquiz.com/sorteio/participe-da-campanha-cifra-do-bem-2-mil-reais-em-compras/?utm_source=347&utm_term=347&cf_ads=347',
-  'https://cifradedinheiro.com/acao-solidaria/transforme-sua-casa-participe-da-campanha-transforme-a-sua-casa-escolha-um-eletrodomestico-com-o-cifra-do-bem/?utm_source=347&utm_term=347&cf_ads=347',
-  'https://cifradedinheiro.com/acao-solidaria/participe-da-campanha-e-ganhe-r-2-000-em-dividas-pagas-com-cifra-do-bem/?utm_source=347&utm_term=347&cf_ads=347',
-  'https://brasilquiz.com/sorteio/transforme-sua-rotina-em-uma-aventura-ganhe-r300-semanalmente-com-o-cifra-do-bem/?utm_source=347&utm_term=347&cf_ads=347',
-  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem/?utm_source=347&utm_term=347&cf_ads=347',
-  'https://brasilquiz.com/sorteio/transforme-sua-rotina-em-uma-aventura-ganhe-r300-semanalmente-com-o-cifra-do-bem?utm_source=335&utm_term=335&cf_ads=335',
-  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=335&utm_term=335&cf_ads=335'
-
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=291&utm_term=291&cf_ads=291'
 
 ];
 
 const REFERRERS = [
-  'https://www.facebook.com/',
-  'https://www.tiktok.com/',
-  'https://www.google.com/',
-  'https://www.instagram.com/'
+  'https://l.facebook.com/',
+  'https://www.facebook.com/'
 ];
 
 const USER_AGENTS = [
@@ -365,9 +359,8 @@ async function visitSite(visitNumber) {
       visitData.referrer = referrer;
       visitData.interactions.domain = new URL(site).hostname;
       visitData.utm_params = getUtmParams(site);
-      visitData.source = visitData.utm_params.source !== 'não identificado' 
-        ? visitData.utm_params.source 
-        : new URL(referrer).hostname.replace('www.', '').split('.')[0];
+      visitData.source = parseSource(referrer, visitData.utm_params.source);
+
 
       console.log(`🌎 Abrindo: ${site}`);
       
