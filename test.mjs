@@ -92,7 +92,12 @@ function isAllowedDomain(url) {
 }
 
 const SITE_URLS = [
-  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=291&utm_term=291&cf_ads=291'
+  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=303&utm_term=303&cf_ads=303',
+  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem/?utm_source=342&utm_term=342&cf_ads=342',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=347&utm_term=347&cf_ads=347',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=357&utm_term=357&cf_ads=357',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=216&utm_term=216&cf_ads=216'
 
 ];
 
@@ -102,12 +107,18 @@ const REFERRERS = [
 ];
 
 const USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Version/14.1.2 Safari/537.36',
   'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
-  'Mozilla/5.0 (iPad; CPU OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.84'
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/92.0.902.84',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 OPR/77.0.4054.172',
+  'Mozilla/5.0 (Linux; Android 11; Pixel 5 Build/RQ2A.210305.006) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36',
+  'Mozilla/5.0 (Linux; Android 11; SM-G991B Build/RQ2A.210305.006) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.0 Chrome/91.0.4472.120 Mobile Safari/537.36'
 ];
+
 
 // Configuração do Tor
 const TOR_PROXY = {
@@ -324,7 +335,7 @@ async function visitSite(visitNumber) {
       });
 
       const context = await browser.newContext({
-        userAgent: getRandom(USER_AGENTS),
+        userAgent: getRandom(USER_AGENTS), 
         viewport: { width: getRandomInt(1200, 1920), height: getRandomInt(700, 1080) },
         locale: 'pt-BR',
         timezoneId: 'America/Sao_Paulo',
@@ -332,6 +343,7 @@ async function visitSite(visitNumber) {
         proxy: TOR_PROXY,
         ignoreHTTPSErrors: true
       });
+      
 
       // Adiciona headers extras para parecer mais real
       await context.setExtraHTTPHeaders({
@@ -345,6 +357,7 @@ async function visitSite(visitNumber) {
         'sec-fetch-user': '?1',
         'upgrade-insecure-requests': '1'
       });
+      
 
       const page = await context.newPage();
       const site = getRandom(SITE_URLS);

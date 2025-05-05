@@ -1,7 +1,7 @@
 import { start } from './test.mjs';
 import chalk from 'chalk';
 
-const TOTAL_INSTANCES = 5; // Number of parallel instances to run
+const TOTAL_INSTANCES = 10; // Number of parallel instances to run
 ``
 async function runParallel() {
   console.log(chalk.cyan.bold(`🚀 Iniciando ${TOTAL_INSTANCES} instâncias em paralelo`));
