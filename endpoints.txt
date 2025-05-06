@@ -1,0 +1,17 @@
+login
+auth
+register
+users
+user
+dashboard
+leads
+contact
+webhook
+status
+stats
+admin
+v1/login
+v1/register
+v1/users
+v1/dashboard
+v2/data

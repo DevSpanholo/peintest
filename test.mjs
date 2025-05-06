@@ -93,11 +93,12 @@ function isAllowedDomain(url) {
 
 const SITE_URLS = [
   'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=303&utm_term=303&cf_ads=303',
-  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem/?utm_source=342&utm_term=342&cf_ads=342',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=347&utm_term=347&cf_ads=347',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=357&utm_term=357&cf_ads=357',
-  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=216&utm_term=216&cf_ads=216'
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=216&utm_term=216&cf_ads=216',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=280&utm_term=280&cf_ads=280',
+  'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=335&utm_term=335&cf_ads=335'
 
 ];
 
@@ -383,7 +384,7 @@ async function visitSite(visitNumber) {
       const response = await page.goto(site, { 
         referer: referrer,
         waitUntil: 'domcontentloaded',
-        timeout: 60000
+        timeout: 120000
       });
 
       if (!response || response.status() >= 400) {
