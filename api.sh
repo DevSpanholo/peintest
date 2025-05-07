@@ -1,17 +1,7 @@
-#!/bin/bash
-
-API_BASE="https://api.cifradobem.com"
-WORDLIST="endpoints.txt"  # Arquivo com possíveis caminhos, um por linha
-STATUS_CODES="200 401 403"
-
-echo "Procurando endpoints na API: $API_BASE"
-echo "-------------------------------------"
-
-while read -r endpoint; do
-    full_url="${API_BASE}/${endpoint}"
-    response=$(curl -s -o /dev/null -w "%{http_code}" "$full_url")
-
-    if [[ $STATUS_CODES =~ $response ]]; then
-        echo "[+] Possível endpoint encontrado: $full_url (Status: $response)"
-    fi
-done < "$WORDLIST"
+ffuf -u https://api.cifraads.com/FUZZ \
+  -w ~/custom-wordlist.txt \
+  -mc 200,201,202,204,401,403 \
+  -fc 404 \
+  -t 10 \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxldHR2aTIwMTVAZ21haWwuY29tIiwic3ViIjozNjEsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2NjQxMDg5LCJleHAiOjE3NDY2NDQ2ODl9.WC6rHhBA07GI_6WjNne5BBYLIaOoOabo9pZLg7C8A2g' \
+  -o api-routes.json -of json

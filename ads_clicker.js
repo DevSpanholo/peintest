@@ -99,7 +99,8 @@ const SITE_URLS = [
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=216&utm_term=216&cf_ads=216',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=280&utm_term=280&cf_ads=280',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=335&utm_term=335&cf_ads=335',
-  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698'
+  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698',
+
 
 ];
 
@@ -162,6 +163,39 @@ async function simulateHumanBehavior(page) {
   } catch (error) {
     console.log(chalk.gray('ℹ️ Botão de consentimento não encontrado'));
   }
+  const adFrame = await page.waitForSelector('iframe[id^="google_ads_iframe"]', { timeout: 15000 }).catch(() => null);
+
+if (!adFrame) {
+  console.log(chalk.gray('❌ Nenhum iframe de anúncio encontrado.'));
+} else {
+  const box = await adFrame.boundingBox();
+  if (!box) {
+    console.log(chalk.gray('❌ Não foi possível obter boundingBox do iframe.'));
+  } else {
+    const centerX = box.x + box.width / 2;
+    const centerY = box.y + box.height / 2;
+
+    console.log(`📐 Coordenadas do anúncio: x=${box.x.toFixed(2)}, y=${box.y.toFixed(2)}`);
+
+    console.log('🖱️ Movendo mouse com trajetória realista até o anúncio...');
+    await page.mouse.move(centerX - 100, centerY - 100, { steps: 20 });
+    await page.waitForTimeout(getRandomInt(1000, 2000));
+    await page.mouse.move(centerX - 50, centerY - 50, { steps: 15 });
+    await page.waitForTimeout(getRandomInt(800, 1600));
+    await page.mouse.move(centerX, centerY, { steps: 10 });
+
+    await page.waitForTimeout(getRandomInt(2000, 3000));
+
+    console.log('🖱️ Simulando clique real com mouse down/up...');
+    await page.mouse.down({ button: 'left' });
+    await page.waitForTimeout(getRandomInt(150, 300));
+    await page.mouse.up({ button: 'left' });
+
+    await page.waitForTimeout(getRandomInt(5000, 8000));
+    console.log(chalk.green('✅ Clique real enviado com sucesso.'));
+  }
+}
+
 
   // Tenta clicar no botão "QUERO PARTICIPAR!"
   try {
@@ -233,6 +267,7 @@ async function simulateHumanBehavior(page) {
       console.log(chalk.green(`📢 Encontrados ${headerAds.length} anúncios no header`));
       
       for (const ad of headerAds) {
+        console.log(chalk.magenta(`🖱️ Tentando clicar no anúncio: ${await ad.getAttribute('src') || 'sem src'}`));
         const isVisible = await ad.isVisible();
         if (isVisible) {
           // Tenta clicar no anúncio com 30% de chance
@@ -362,6 +397,26 @@ async function visitSite(visitNumber) {
       
 
       const page = await context.newPage();
+      try {
+        const ipPage = await context.newPage();
+        const ipResp = await ipPage.goto('https://api.ipify.org?format=json', { timeout: 10000 });
+        const ipJson = await ipResp.json();
+        visitData.ip = ipJson.ip;
+        console.log(chalk.blue(`🌐 IP da sessão detectado: ${ipJson.ip}`));
+        await ipPage.close();
+      } catch (err) {
+        console.log(chalk.red('⚠️ Falha ao obter IP da sessão:', err.message));
+      }
+      page.on('framenavigated', frame => {
+        console.log(chalk.blue(`🧭 Frame navegou para: ${frame.url()}`));
+      });
+      page.on('popup', popup => {
+        console.log(chalk.cyan('🆕 Popup detectado (possível clique no anúncio)'));
+        popup.on('load', () => {
+          console.log(chalk.cyan(`🌐 Popup carregado com URL: ${popup.url()}`));
+        });
+      });
+      
       const site = getRandom(SITE_URLS);
       const referrer = getRandom(REFERRERS);
 
@@ -391,6 +446,8 @@ async function visitSite(visitNumber) {
       if (!response || response.status() >= 400) {
         throw new Error(`Página retornou status ${response?.status() || 'desconhecido'}`);
       }
+
+      await page.waitForTimeout(4000);
 
       // Aguarda e aceita o consentimento de cookies se aparecer
       try {
@@ -487,6 +544,10 @@ async function visitSite(visitNumber) {
         console.log(chalk.yellow(`⏳ Aguardando mais ${Math.round(remainingTime/1000)}s para view válida...`));
         await page.waitForTimeout(remainingTime);
       }
+      
+      // ✅ Agora sempre simula o comportamento humano, mesmo que tempo já tenha passado
+      await simulateHumanBehavior(page);
+      
 
       const finalWait = getRandomInt(2000, 5000);
       await page.waitForTimeout(finalWait);

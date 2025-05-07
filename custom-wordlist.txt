@@ -1,0 +1,15 @@
+daily-treatments
+daily-treatments/update
+daily-treatments/override
+daily-treatment
+report
+stats
+revenue
+revenue/update
+revenue-override
+admin
+users
+users/update
+metrics
+metrics/override
+analytics

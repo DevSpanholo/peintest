@@ -1,4 +1,4 @@
-import { start } from './test.mjs';
+import { start } from './ads_clicker.js';
 import chalk from 'chalk';
 
 const TOTAL_INSTANCES = 10; // Number of parallel instances to run
