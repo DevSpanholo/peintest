@@ -1,0 +1,8 @@
+SocksPort 9056
+DataDirectory /Users/spanholo/Downloads/project 12/tor6
+PidFile /Users/spanholo/Downloads/project 12/tor6/tor.pid
+CircuitBuildTimeout 10
+KeepalivePeriod 60
+NewCircuitPeriod 15
+NumEntryGuards 8
+ControlPort 0

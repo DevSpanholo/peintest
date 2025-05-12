@@ -99,7 +99,8 @@ const SITE_URLS = [
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=216&utm_term=216&cf_ads=216',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=280&utm_term=280&cf_ads=280',
   'https://brasilquiz.com/sorteio/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=335&utm_term=335&cf_ads=335',
-  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698'
+  'https://cifradedinheiro.com/acao-solidaria/participe-e-conquiste-um-playstation-5-ou-um-pc-gamer-com-o-cifra-do-bem?utm_source=698&utm_term=698&cf_ads=698',
+
 
 ];
 
